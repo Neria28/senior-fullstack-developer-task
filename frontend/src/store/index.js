@@ -1,19 +1,28 @@
-import { createStore } from "vuex"
+import { createStore } from "vuex";
 
 export default createStore({
-	state: {
-		// Define your state here
-	},
-	getters: {
-		// Define your getters here
-	},
-	mutations: {
-		// Define your mutations here
-	},
-	actions: {
-		// Define your actions here
-	},
-	modules: {
-		// Define your modules here
-	},
-})
+  state: {
+    user: {},
+  },
+  getters: {
+  },
+  mutations: {
+    setUser(state, userData) {
+      state.user = userData;
+    },
+    clearUser(state) {
+      state.user = {};
+    },
+  },
+  actions: {
+    async loginUser({ commit }, userData) {
+      try {
+        commit("setUser", userData);
+      } catch (error) {
+        console.error("Login failed:", error);
+      }
+    },
+  },
+  modules: {
+  },
+});

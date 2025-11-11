@@ -12,9 +12,11 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 import axios from "axios";
 
 const router = useRouter();
+const store = useStore();
 
 const username = ref("");
 const error = ref("");
@@ -34,6 +36,8 @@ const handleLogin = async () => {
     );
 
     if (response.data) {
+      await store.dispatch("loginUser", response.data);
+
       router.push({
         path: "/home",
         query: { username: username.value },
