@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import axios from "axios";
@@ -19,30 +19,19 @@ const router = useRouter();
 const store = useStore();
 
 const username = ref("");
-const error = ref("");
+const isLoading = computed(() => store.getters.isLoading);
+const error = computed(() => store.getters.getError);
 
 const handleLogin = async () => {
   try {
-    error.value = "";
+    store.dispatch("clearError");
 
-    const response = await axios.post(
-      `/api/users/login/${username.value}`,
-      {},
-      {
-        headers: {
-          token: username.value,
-        },
-      }
-    );
+    await store.dispatch("loginUser", username.value);
 
-    if (response.data) {
-      await store.dispatch("loginUser", response.data);
-
-      router.push({
-        path: "/home",
-        query: { username: username.value },
-      });
-    }
+    router.push({
+      path: "/home",
+      query: { username: username.value },
+    });
   } catch (err) {
     error.value =
       err.response?.data?.message || "Login failed. Please try again.";
