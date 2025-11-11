@@ -20,6 +20,10 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<RequestWithUser>();
     const username = request.headers['token'] as string | undefined;
 
+    if (!username) {
+      throw new UnauthorizedException('Token header is missing');
+    }
+
     const user = await this.usersService.findByUsername(username);
 
     if (!user) {
