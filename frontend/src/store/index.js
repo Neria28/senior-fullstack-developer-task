@@ -8,6 +8,7 @@ export default createStore({
     error: null,
   },
   getters: {
+    isLoggedIn: (state) => Object.keys(state.user).length > 0,
     getUserRoles: (state) => state.user.roles || [],
     isLoading: (state) => state.loading,
     getError: (state) => state.error,
